@@ -1,0 +1,19 @@
+# MacOS
+.DS_Store
+
+# Vim/Neovim
+nvim/plugin/
+nvim/.netrwhist
+*.swp
+*.swo
+
+# Zsh
+.zcompdump*
+
+# Local machine-specific configs
+*local*
+*.local
+
+# History files
+.zsh_history
+

@@ -1,0 +1,177 @@
+# ═══════════════════════════════════════════════════════════
+# TECHNO-HERETEK NYAN-9 STARSHIP CONFIGURATION
+# For the glory of the Dark Mechanicum
+# ═══════════════════════════════════════════════════════════
+
+command_timeout = 500
+
+# Maximum heretek format - ALL SYSTEMS MONITORED
+format = """
+[╔═══MACHINE SPIRIT INTERFACE═══╗](bold green)
+[║](bold green) $time[⚙](bold cyan)$username[@](bold white)$hostname[⚡](bold cyan)
+[║](bold green) [COGITATOR](bold cyan)[$directory](bold green)[⚙](bold cyan)
+[║](bold green) $git_branch$git_commit$git_state$git_status
+[║](bold green) [TECH](bold cyan)[$python$nodejs$rust$golang$java$docker_context](bold green)
+[║](bold green) [SYS](bold cyan)[$cmd_duration$memory_usage$battery](bold green)
+[╚═══](bold green)$character"""
+
+add_newline = true
+
+# Time - Imperium chronometer format
+[time]
+disabled = false
+style = "bold yellow"
+format = "[⌚$time](bold yellow)"
+time_format = "%H:%M:%S"
+utc_time_offset = "local"
+
+# Username - Heretek designation
+[username]
+style_user = "bold red"
+style_root = "bold red"
+format = "[HERETEK::$user](bold red)"
+disabled = false
+show_always = true
+
+# Hostname - Corrupted node identifier
+[hostname]
+ssh_only = false
+format = "[NODE::$hostname](bold red)"
+trim_at = "."
+disabled = false
+
+# Directory - Data vault location
+[directory]
+truncation_length = 5
+truncate_to_repo = false
+fish_style_pwd_dir_length = 0
+style = "bold green"
+read_only = "[⚠LOCKED]"
+format = "[\\[](bold yellow)[$path]($style)[$read_only]($read_only_style)[\\]](bold yellow)"
+repo_root_style = "bold green"
+home_symbol = "~/SANCTUM"
+
+[directory.substitutions]
+"Documents" = "📜DATASLATE"
+"Downloads" = "⬇RECV"
+"Music" = "🎵HYMNAL"
+"Pictures" = "📸PIX"
+"Projects" = "⚙FORGES"
+"Desktop" = "🖥TERMINAL"
+".config" = "⚙CFG"
+
+# Git - Corrupted version control
+[git_branch]
+symbol = "⚡"
+style = "bold magenta"
+format = "[REPO\\[](bold yellow)[$symbol$branch]($style)[\\]](bold yellow)"
+always_show_remote = false
+
+[git_commit]
+commit_hash_length = 7
+format = "[HASH\\[](bold yellow)[$hash]($style)[\\]](bold yellow)"
+style = "bold yellow"
+only_detached = false
+tag_symbol = "🏷"
+
+[git_state]
+format = "[STATE\\[](bold yellow)[$state($progress_current/$progress_total)]($style)[\\]](bold yellow)"
+style = "bold red"
+rebase = "⚠REBASE"
+merge = "⚠MERGE"
+revert = "⚠REVERT"
+cherry_pick = "⚠CHERRY"
+bisect = "⚠BISECT"
+
+[git_status]
+format = "[STATUS\\[](bold yellow)[$all_status$ahead_behind]($style)[\\]](bold yellow)"
+style = "bold red"
+conflicted = "💥CONFLICT:"
+ahead = "⬆${count} "
+behind = "⬇${count} "
+diverged = "⚡DIV:${ahead_count}↓${behind_count} "
+up_to_date = "✓SYNC "
+untracked = "?${count} "
+stashed = "📦${count} "
+modified = "⚠${count} "
+staged = "+${count} "
+renamed = "»${count} "
+deleted = "✗${count} "
+
+# Languages - Tech-specifications
+[python]
+symbol = "🐍"
+style = "bold yellow"
+format = "[PY\\[](bold yellow)[$symbol$version]($style)[\\]](bold yellow)"
+
+[nodejs]
+symbol = "⬢"
+style = "bold green"
+format = "[NODE\\[](bold yellow)[$symbol$version]($style)[\\]](bold yellow)"
+
+[rust]
+symbol = "⚙"
+style = "bold red"
+format = "[RUST\\[](bold yellow)[$symbol$version]($style)[\\]](bold yellow)"
+
+[golang]
+symbol = "🐹"
+style = "bold cyan"
+format = "[GO\\[](bold yellow)[$symbol$version]($style)[\\]](bold yellow)"
+
+[java]
+symbol = "☕"
+style = "bold red"
+format = "[JAVA\\[](bold yellow)[$symbol$version]($style)[\\]](bold yellow)"
+
+# Infrastructure - Xenos tech
+[docker_context]
+symbol = "🐳"
+style = "bold blue"
+format = "[CONTAINER\\[](bold yellow)[$symbol$context]($style)[\\]](bold yellow)"
+only_with_files = false
+
+# System vitals - Machine spirit health
+[cmd_duration]
+min_time = 100
+style = "bold yellow"
+format = "[⏱EXEC:$duration](bold yellow)"
+
+[memory_usage]
+disabled = false
+threshold = 0
+symbol = "🧠"
+style = "bold red"
+format = "[MEM:$ram_pct]($style)"
+
+[battery]
+full_symbol = "⚡FULL"
+charging_symbol = "⚡CHRG"
+discharging_symbol = "⚠PWR"
+unknown_symbol = "?PWR"
+empty_symbol = "💀DEAD"
+format = "[BAT:$symbol$percentage]($style)"
+
+[[battery.display]]
+threshold = 100
+style = "bold green"
+
+[[battery.display]]
+threshold = 30
+style = "bold yellow"
+
+[[battery.display]]
+threshold = 15
+style = "bold red"
+
+# Prompt character - Mechanicus approval/rejection
+[character]
+success_symbol = "[01010011>>](bold green)"
+error_symbol = "[01000101✗✗](bold red)"
+vimcmd_symbol = "[<<COMMAND](bold yellow)"
+
+# Package version
+[package]
+symbol = "📦"
+style = "bold yellow"
+format = "[PKG\\[](bold yellow)[$symbol$version]($style)[\\]](bold yellow)"
