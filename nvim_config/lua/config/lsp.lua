@@ -1,5 +1,4 @@
--- ~/.config/nvim/lua/config/lsp.lua
-
+---- ~/.config/nvim/lua/config/lsp.lua
 -- Setup Mason (LSP installer)
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -11,6 +10,9 @@ require("mason-lspconfig").setup({
     "yamlls",         -- YAML
     "jsonls",         -- JSON
     "marksman",       -- Markdown
+    "gopls",          -- Go
+    "clangd",         -- C/C++
+    "powershell_es",  -- PowerShell
   },
 })
 
@@ -59,8 +61,18 @@ vim.lsp.config.lua_ls = {
     filetypes = { "lua" },
     settings = {
       Lua = {
+        runtime = {
+          version = "LuaJIT",  -- Tell the language server which version of Lua you're using
+        },
         diagnostics = {
-          globals = { "vim" },
+          globals = { "vim" },  -- Recognize the 'vim' global
+        },
+        workspace = {
+          library = vim.api.nvim_get_runtime_file("", true),  -- Make the server aware of Neovim runtime files
+          checkThirdParty = false,
+        },
+        telemetry = {
+          enable = false,
         },
       },
     },
@@ -68,6 +80,11 @@ vim.lsp.config.lua_ls = {
   on_attach = on_attach,
   capabilities = capabilities,
 }
+
+
+
+
+
 
 -- Bash
 vim.lsp.config.bashls = {
@@ -77,6 +94,41 @@ vim.lsp.config.bashls = {
   },
   on_attach = on_attach,
   capabilities = capabilities,
+}
+
+-- Go
+vim.lsp.config.gopls = {
+  default_config = {
+    cmd = { "gopls" },
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+          shadow = true,
+        },
+        staticcheck = true,
+        gofumpt = true,
+      },
+    },
+  },
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+-- C/C++
+vim.lsp.config.clangd = {
+  default_config = {
+    cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu" },
+    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+    capabilities = {
+      offsetEncoding = { "utf-16" },  -- clangd uses utf-16
+    },
+  },
+  on_attach = on_attach,
+  capabilities = vim.tbl_deep_extend("force", capabilities, {
+    offsetEncoding = { "utf-16" },
+  }),
 }
 
 -- Terraform
@@ -119,14 +171,29 @@ vim.lsp.config.marksman = {
   capabilities = capabilities,
 }
 
+-- PowerShell
+vim.lsp.config.powershell_es = {
+  default_config = {
+    cmd = { "pwsh", "-NoLogo", "-NoProfile", "-Command", 
+            vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1" },
+    filetypes = { "ps1", "psm1", "psd1" },
+    root_dir = vim.fs.root(0, {".git"}),
+  },
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
 -- Enable language servers
 vim.lsp.enable("pyright")
 vim.lsp.enable("lua_ls")
 vim.lsp.enable("bashls")
+vim.lsp.enable("gopls")
+vim.lsp.enable("clangd")
 vim.lsp.enable("terraformls")
 vim.lsp.enable("yamlls")
 vim.lsp.enable("jsonls")
 vim.lsp.enable("marksman")
+vim.lsp.enable("powershell_es")
 
 -- Diagnostic configuration
 vim.diagnostic.config({
